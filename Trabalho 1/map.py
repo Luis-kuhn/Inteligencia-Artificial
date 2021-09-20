@@ -208,47 +208,64 @@ class Map(object):
 
 if __name__ == '__main__':
     
-    # matrix = [[1, 1, 11, 11, 1, 1],
-    #           [1, 0,  0,  0, 0, 1],
-    #           [1, 0,  0,  0, 0, 1],
-    #           [1, 0,  0,  0, 0, 1],
-    #           [1, 0,  0,  0, 0, 1],
-    #           [1, 1,  1,  1, 1, 1]]
+    # Tamanho 
+    # 3- 3x3
+    # 4- 4x4
+    # 6- 6x6
+    matrixSize = 6
+    
+    # Modo 
+    # 1- Simples
+    # 2- Complexo
+    mode = 2
+    
+    if matrixSize == 3:
+        matrix = [[1, 1, 11, 1, 1],
+                  [1, 0,  0, 0, 1],
+                  [1, 0,  0, 0, 1],
+                  [1, 0,  0, 0, 1],
+                  [1, 1,  1, 1, 1]]
+        
+    elif matrixSize == 4:
+        matrix = [[1, 1, 11, 11, 1, 1],
+                  [1, 0,  0,  0, 0, 1],
+                  [1, 0,  0,  0, 0, 1],
+                  [1, 0,  0,  0, 0, 1],
+                  [1, 0,  0,  0, 0, 1],
+                  [1, 1,  1,  1, 1, 1]]
+        
+    elif matrixSize == 6:
+        matrix = [[1, 11, 1, 11, 11, 1, 11, 1],
+                  [1,  0, 0,  0,  0, 0,  0, 1],
+                  [1,  0, 0,  0,  0, 0,  0, 1],
+                  [1,  0, 0,  0,  0, 0,  0, 1],
+                  [1,  0, 0,  0,  0, 0,  0, 1],
+                  [1,  0, 0,  0,  0, 0,  0, 1],
+                  [1,  0, 0,  0,  0, 0,  0, 1],
+                  [1,  1, 1,  1,  1, 1,  1, 1]]
+    
+    if mode == 1:
+        randomX = random.randint(1, len(matrix[0]) - 2)
+        randomY = random.randint(1, len(matrix[0]) - 2)
 
-    matrix = [[1, 11, 1, 11, 11, 1, 11, 1],
-              [1,  0, 0,  0,  0, 0,  0, 1],
-              [1,  0, 0,  0,  0, 0,  0, 1],
-              [1,  0, 0,  0,  0, 0,  0, 1],
-              [1,  0, 0,  0,  0, 0,  0, 1],
-              [1,  0, 0,  0,  0, 0,  0, 1],
-              [1,  0, 0,  0,  0, 0,  0, 1],
-              [1,  1, 1,  1,  1, 1,  1, 1]]
+        robot = SimpleRobot(randomX, randomY)
+        game = Map(600, 600, matrix, 6)
 
-    # matrix = [[1, 1, 11, 1, 1],
-    #           [1, 0,  0, 0, 1],
-    #           [1, 0,  0, 0, 1],
-    #           [1, 0,  0, 0, 1],
-    #           [1, 1,  1, 1, 1]]
+        robot.set_path(game.create_path())
+        robot.set_map(game.map)
+        robot.spawn()
 
-    robot = ComplexRobot(1, 1)
-    game = Map(600, 600, matrix, 6)
+        game.setup()
+        game.main()
 
-    robot.set_map(game.map)
-    robot.spawn()
+    elif mode == 2:
+        robot = ComplexRobot(1, 1)
+        game = Map(600, 600, matrix, 6)
 
-    game.setup()
-    game.main()
+        robot.set_map(game.map)
+        robot.spawn()
 
-    # randomX = random.randint(1, len(matrix[0]) - 2)
-    # randomY = random.randint(1, len(matrix[0]) - 2)
-
-    # robot = SimpleRobot(randomX, randomY)
-    # game = Map(600, 600, matrix, 6)
-
-    # robot.set_path(game.create_path())
-    # robot.set_map(game.map)
-    # robot.spawn()
-
-    # game.setup()
-    # game.main()
+        game.setup()
+        game.main()
+        
     
