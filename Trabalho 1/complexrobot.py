@@ -12,22 +12,56 @@ class ComplexRobot(object):
         self.garbages_positions = []
         self.garbages_distances = []
 
+        self.sprite = ''
+
         self.steps = 0
-        self.spriteState = ''
+        self.state = 'down'
 
         self.dirty = False
         self.target = None
         self.finished = False
 
+    def get_direction(self):
+        '''
+        Redefine a sprite baseado na direção.
+        '''
+
+        if(self.state == 'down'):
+            self.sprite = pygame.image.load('assets/robot/down.png')
+
+        elif(self.state == 'up'):
+            self.sprite = pygame.image.load('assets/robot/up.png')
+
+        elif(self.state == 'right'):
+            self.sprite = pygame.image.load('assets/robot/right.png')
+
+        elif(self.state == 'left'):
+            self.sprite = pygame.image.load('assets/robot/left.png')
+
+        elif(self.state == 'clean'):
+            self.sprite = pygame.image.load('assets/robot/clean.png')
+
+        elif(self.state == 'finished'):
+            self.sprite = pygame.image.load('assets/robot/finished.png')
+
     def set_map(self, map):
+        '''
+        Seta o mapa.
+        '''
 
         self.map = map
 
     def spawn(self):
+        '''
+        Coloca o robô no mapa.
+        '''
 
-        self.map[self.x][self.y] = 2
+        self.map[self.y][self.x] = 2
 
     def find_garbages(self):
+        '''
+        Procura os lixos no mapa e salva suas posições.
+        '''
 
         positions_list = []
 
@@ -35,21 +69,23 @@ class ComplexRobot(object):
 
             for y in range(len(self.map[0])):
 
-                if self.map[x][y] == 3:
+                if self.map[y][x] == 3:
 
                     positions_list.append((x, y))
 
         if not positions_list:
 
-            print('finished')
             self.finished = True
-            self.spriteState = 'finished'
+            self.state = 'finished'
 
             return
 
         self.garbages_positions = positions_list
 
     def calculate_distances(self):
+        '''
+        Calcula as distâncias entre o robô e todos os lixos encontrados.
+        '''
 
         distances_list = []
 
@@ -60,6 +96,9 @@ class ComplexRobot(object):
         self.garbages_distances = distances_list
 
     def find_closest(self):
+        '''
+        Procura o lixo mais próximo.
+        '''
 
         self.find_garbages()
         self.calculate_distances()
@@ -72,57 +111,67 @@ class ComplexRobot(object):
         self.target = closest_position
 
     def move(self):
+        '''
+        Move o robô pelo mapa.
+        '''
 
         if not self.finished:
 
+            # Se há um lixo alvo...
             if self.target is not None:
 
                 pygame.time.wait(300)
 
-                self.map[self.x][self.y] = 0
+                self.map[self.y][self.x] = 0
                 self.steps += 1
 
+                # Retira o lixo
                 if self.dirty:
 
-                    print('Estado da percepcao: 1 Acao escolhida: Aspirar', self.steps) 
-                    self.map[self.x][self.y] = 2
-                    self.spriteState = 'clean'
+                    print('Estado da percepcao: 1 Acao escolhida: Aspirar') 
+                    self.map[self.y][self.x] = 2
+                    self.state = 'clean'
 
                     self.dirty = False
                     self.target = None
 
                     return
 
+                # Direita
                 if self.target[0] > self.x:
 
-                    print('Estado da percepcao: 0 Acao escolhida: Direita', self.steps)
-                    self.spriteState = 'right'
+                    print('Estado da percepcao: 0 Acao escolhida: Direita')
+                    self.state = 'right'
                     self.x += 1
 
+                # Esquerda
                 elif self.target[0] < self.x:
 
-                    print('Estado da percepcao: 0 Acao escolhida: Esquerda', self.steps)
-                    self.spriteState = 'left'
+                    print('Estado da percepcao: 0 Acao escolhida: Esquerda')
+                    self.state = 'left'
                     self.x -= 1
 
+                # Abaixo
                 elif self.target[1] > self.y:
 
-                    print('Estado da percepcao: 0 Acao escolhida: Abaixo', self.steps)
-                    self.spriteState = 'down'
+                    print('Estado da percepcao: 0 Acao escolhida: Abaixo')
+                    self.state = 'down'
                     self.y += 1
 
+                # Acima
                 elif self.target[1] < self.y:
 
-                    print('Estado da percepcao: 0 Acao escolhida: Acima', self.steps)
-                    self.spriteState = 'up'
+                    print('Estado da percepcao: 0 Acao escolhida: Acima')
+                    self.state = 'up'
                     self.y -= 1
                     
-                self.dirty = True if self.map[self.x][self.y] == 3 else False
+                self.dirty = True if self.map[self.y][self.x] == 3 else False
 
-                self.map[self.x][self.y] = 2
+                self.map[self.y][self.x] = 2
                 
-
+            # Se não há...
             else:
 
+                # Procura o menor lixo e anda
                 self.find_closest()
                 self.move()

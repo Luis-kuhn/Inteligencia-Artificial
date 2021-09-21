@@ -10,7 +10,7 @@ class Map(object):
 
         self.height = height
         self.width = width
-        self.robotSprite = pygame.image.load('assets/robot/robotDown.png')
+        
         pygame.init()
 
         self.screen = pygame.display.set_mode([self.width, self.height])
@@ -24,6 +24,9 @@ class Map(object):
         self.WHITE = (200, 200, 200)
 
     def create_map(self):
+        '''
+        Desenha os quadrados do mapa.
+        '''
 
         for x in range(0, self.width, self.block_size):
 
@@ -33,6 +36,9 @@ class Map(object):
                 pygame.draw.rect(self.screen, self.WHITE, rect, 1)
 
     def create_walls(self):
+        '''
+        Desenha as paredes.
+        '''
 
         window = pygame.image.load('assets/wall_window.png')
         window = pygame.transform.scale(window, (self.block_size, self.block_size))
@@ -47,12 +53,12 @@ class Map(object):
 
             for y in range(len(self.map[0])):
 
-                # Window
+                # Janela
                 if self.map[y][x] == 11:
 
                     self.screen.blit(window, (x * self.block_size, y * self.block_size, self.block_size, self.block_size))
                     
-                # Wall
+                # Parede
                 if self.map[y][x] == 1:
 
                     if x == 0 or x == len(self.map[0]) - 1:
@@ -68,12 +74,12 @@ class Map(object):
 
                         self.screen.blit(wall_corner, (x * self.block_size, y * self.block_size, self.block_size, self.block_size))
                         
-                    if y == 0  and x == len(self.map[0]) - 1:
+                    if y == 0 and x == len(self.map[0]) - 1:
 
                         rotated_wall_corner = pygame.transform.rotate(wall_corner, -90)
                         self.screen.blit(rotated_wall_corner, (x * self.block_size, y * self.block_size, self.block_size, self.block_size))
                     
-                    if x==0  and y == len(self.map) - 1:
+                    if x == 0 and y == len(self.map) - 1:
 
                         rotated_wall_corner = pygame.transform.rotate(wall_corner, 90)
                         self.screen.blit(rotated_wall_corner, (x * self.block_size, y * self.block_size, self.block_size, self.block_size))
@@ -82,22 +88,11 @@ class Map(object):
 
                         rotated_wall_corner = pygame.transform.rotate(wall_corner, 180)
                         self.screen.blit(rotated_wall_corner, (x * self.block_size, y * self.block_size, self.block_size, self.block_size))
-
-    def animate_moviment(self):
-        if(robot.spriteState == 'down'):
-            self.robotSprite = pygame.image.load('assets/robot/robotDown.png')
-        elif(robot.spriteState=='up'):
-            self.robotSprite = pygame.image.load('assets/robot/robotUp.png')
-        elif(robot.spriteState=='right'):
-            self.robotSprite = pygame.image.load('assets/robot/robotRight.png')
-        elif(robot.spriteState=='left'):
-            self.robotSprite = pygame.image.load('assets/robot/robotLeft.png')
-        elif(robot.spriteState=='clean'):
-            self.robotSprite = pygame.image.load('assets/robot/robotClean.png')
-        elif(robot.spriteState=='finished'):
-            self.robotSprite = pygame.image.load('assets/robot/robotFinished.png')
     
     def create_garbages(self):
+        '''
+        Desenha os lixos.
+        '''
 
         garbage = pygame.image.load('assets/trash.png')
 
@@ -118,6 +113,9 @@ class Map(object):
                     self.map[x][y] = 3
 
     def redraw_screen(self):
+        '''
+        Redesenha todos os sprites.
+        '''
 
         self.screen.fill((255, 255, 255))
 
@@ -131,7 +129,7 @@ class Map(object):
             for y in range(1, len(self.map[0]) - 1):
 
                 # Garbage
-                if self.map[x][y] == 3:
+                if self.map[y][x] == 3:
 
                     garbage_x = int(x * self.block_size + (self.block_size / 2) - (garbage.get_rect().width  / 2))
                     garbage_y = int(y * self.block_size + (self.block_size / 2) - (garbage.get_rect().height / 2))
@@ -139,20 +137,23 @@ class Map(object):
                     self.screen.blit(garbage, (garbage_x , garbage_y))
 
                 # Robot
-                elif self.map[x][y] == 2:
-                    self.animate_moviment()
+                elif self.map[y][x] == 2:
+
+                    robot.get_direction()
+
                     rect = pygame.Rect(x * self.block_size, y * self.block_size, self.block_size, self.block_size)
-                    self.robotSprite = pygame.transform.scale(self.robotSprite, (self.block_size, self.block_size))
+                    robot.sprite = pygame.transform.scale(robot.sprite, (self.block_size, self.block_size))
                     
-                    self.screen.blit(self.robotSprite, rect)
+                    self.screen.blit(robot.sprite, rect)
                     
-
-
     def create_path(self):
+        '''
+        Cria um caminho fixo para percorrer todo o mapa.
+        '''
 
         path = []
 
-        # Draw snake path
+        # Desenha o caminho
         for x in range(1, len(self.map) - 1):
 
             if (x % 2 == 1):
@@ -167,13 +168,13 @@ class Map(object):
 
         last = path[-1]
 
-        # Go up
+        # Vai para cima
         while last[1] != 1:
 
             last = (last[0], last[1] - 1)
             path.append(last)
 
-        # Go left
+        # Vai para esquerda
         while last[0] != 2:
 
             last = (last[0] - 1, last[1])
@@ -182,6 +183,9 @@ class Map(object):
         return path
 
     def setup(self):
+        '''
+        Desenha a tela inicialmente.
+        '''
 
         self.screen.fill((255, 255, 255))
 
@@ -192,6 +196,9 @@ class Map(object):
         pygame.display.flip()
 
     def main(self):
+        '''
+        Loop principal do programa.
+        '''
 
         running = True
         finished = False
@@ -227,24 +234,24 @@ if __name__ == '__main__':
     
     
     print('Tamanho:') 
-    print('3- 3x3')
-    print('4- 4x4')
-    print('6- 6x6')
-    matrixSize = int(input("Digite uma das opções de Tamanho: "))
+    print('3 - 3x3')
+    print('4 - 4x4')
+    print('6 - 6x6')
+    matrix_size = int(input("Digite uma das opções de Tamanho: "))
     
     print('Modo:')
-    print('1- Simples')
-    print('2- Complexo')
+    print('1 - Simples')
+    print('2 - Complexo')
     mode = int(input("Digite uma das opções de Modo: "))
     
-    if matrixSize == 3:
+    if matrix_size == 3:
         matrix = [[1, 1, 11, 1, 1],
                   [1, 0,  0, 0, 1],
                   [1, 0,  0, 0, 1],
                   [1, 0,  0, 0, 1],
                   [1, 1,  1, 1, 1]]
         
-    elif matrixSize == 4:
+    elif matrix_size == 4:
         matrix = [[1, 1, 11, 11, 1, 1],
                   [1, 0,  0,  0, 0, 1],
                   [1, 0,  0,  0, 0, 1],
@@ -252,7 +259,7 @@ if __name__ == '__main__':
                   [1, 0,  0,  0, 0, 1],
                   [1, 1,  1,  1, 1, 1]]
         
-    elif matrixSize == 6:
+    elif matrix_size == 6:
         matrix = [[1, 11, 1, 11, 11, 1, 11, 1],
                   [1,  0, 0,  0,  0, 0,  0, 1],
                   [1,  0, 0,  0,  0, 0,  0, 1],
@@ -263,10 +270,10 @@ if __name__ == '__main__':
                   [1,  1, 1,  1,  1, 1,  1, 1]]
     
     if mode == 1:
-        randomX = random.randint(1, len(matrix[0]) - 2)
-        randomY = random.randint(1, len(matrix[0]) - 2)
+        random_x = random.randint(1, len(matrix[0]) - 2)
+        random_y = random.randint(1, len(matrix[0]) - 2)
 
-        robot = SimpleRobot(randomX, randomY)
+        robot = SimpleRobot(random_x, random_y)
         game = Map(600, 600, matrix, 6)
 
         robot.set_path(game.create_path())
