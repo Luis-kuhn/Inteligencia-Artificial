@@ -13,6 +13,7 @@ class ComplexRobot(object):
         self.garbages_distances = []
 
         self.steps = 0
+        self.spriteState = ''
 
         self.dirty = False
         self.target = None
@@ -42,6 +43,7 @@ class ComplexRobot(object):
 
             print('finished')
             self.finished = True
+            self.spriteState = 'finished'
 
             return
 
@@ -75,7 +77,7 @@ class ComplexRobot(object):
 
             if self.target is not None:
 
-                pygame.time.wait(100)
+                pygame.time.wait(300)
 
                 self.map[self.x][self.y] = 0
                 self.steps += 1
@@ -84,6 +86,7 @@ class ComplexRobot(object):
 
                     print('Estado da percepcao: 1 Acao escolhida: Aspirar', self.steps) 
                     self.map[self.x][self.y] = 2
+                    self.spriteState = 'clean'
 
                     self.dirty = False
                     self.target = None
@@ -93,21 +96,25 @@ class ComplexRobot(object):
                 if self.target[0] > self.x:
 
                     print('Estado da percepcao: 0 Acao escolhida: Direita', self.steps)
+                    self.spriteState = 'right'
                     self.x += 1
 
                 elif self.target[0] < self.x:
 
                     print('Estado da percepcao: 0 Acao escolhida: Esquerda', self.steps)
+                    self.spriteState = 'left'
                     self.x -= 1
 
                 elif self.target[1] > self.y:
 
                     print('Estado da percepcao: 0 Acao escolhida: Abaixo', self.steps)
+                    self.spriteState = 'down'
                     self.y += 1
 
                 elif self.target[1] < self.y:
 
                     print('Estado da percepcao: 0 Acao escolhida: Acima', self.steps)
+                    self.spriteState = 'up'
                     self.y -= 1
                     
                 self.dirty = True if self.map[self.x][self.y] == 3 else False

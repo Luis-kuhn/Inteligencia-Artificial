@@ -10,7 +10,7 @@ class Map(object):
 
         self.height = height
         self.width = width
-
+        self.robotSprite = pygame.image.load('assets/robot/robotDown.png')
         pygame.init()
 
         self.screen = pygame.display.set_mode([self.width, self.height])
@@ -83,6 +83,20 @@ class Map(object):
                         rotated_wall_corner = pygame.transform.rotate(wall_corner, 180)
                         self.screen.blit(rotated_wall_corner, (x * self.block_size, y * self.block_size, self.block_size, self.block_size))
 
+    def animate_moviment(self):
+        if(robot.spriteState == 'down'):
+            self.robotSprite = pygame.image.load('assets/robot/robotDown.png')
+        elif(robot.spriteState=='up'):
+            self.robotSprite = pygame.image.load('assets/robot/robotUp.png')
+        elif(robot.spriteState=='right'):
+            self.robotSprite = pygame.image.load('assets/robot/robotRight.png')
+        elif(robot.spriteState=='left'):
+            self.robotSprite = pygame.image.load('assets/robot/robotLeft.png')
+        elif(robot.spriteState=='clean'):
+            self.robotSprite = pygame.image.load('assets/robot/robotClean.png')
+        elif(robot.spriteState=='finished'):
+            self.robotSprite = pygame.image.load('assets/robot/robotFinished.png')
+    
     def create_garbages(self):
 
         garbage = pygame.image.load('assets/trash.png')
@@ -126,9 +140,12 @@ class Map(object):
 
                 # Robot
                 elif self.map[x][y] == 2:
-
+                    self.animate_moviment()
                     rect = pygame.Rect(x * self.block_size, y * self.block_size, self.block_size, self.block_size)
-                    pygame.draw.rect(self.screen, self.RED, rect, 1)
+                    self.robotSprite = pygame.transform.scale(self.robotSprite, (self.block_size, self.block_size))
+                    
+                    self.screen.blit(self.robotSprite, rect)
+                    
 
 
     def create_path(self):
@@ -208,16 +225,17 @@ class Map(object):
 
 if __name__ == '__main__':
     
-    # Tamanho 
-    # 3- 3x3
-    # 4- 4x4
-    # 6- 6x6
-    matrixSize = 6
     
-    # Modo 
-    # 1- Simples
-    # 2- Complexo
-    mode = 2
+    print('Tamanho:') 
+    print('3- 3x3')
+    print('4- 4x4')
+    print('6- 6x6')
+    matrixSize = int(input("Digite uma das opções de Tamanho: "))
+    
+    print('Modo:')
+    print('1- Simples')
+    print('2- Complexo')
+    mode = int(input("Digite uma das opções de Modo: "))
     
     if matrixSize == 3:
         matrix = [[1, 1, 11, 1, 1],

@@ -9,7 +9,8 @@ class SimpleRobot(object):
 
         self.path = [] 
         self.map = []
-
+        
+        self.spriteState = ''
         self.dirty = False
         self.target = None
         self.finished = False
@@ -39,12 +40,13 @@ class SimpleRobot(object):
 
     def move(self):
 
-        pygame.time.wait(100)
+        pygame.time.wait(300)
 
         # Clean
         if self.dirty:
 
             print('Estado da percepcao: 1 Acao escolhida: Aspirar') 
+            self.spriteState = 'clean'
             self.map[self.x][self.y] = 2
             self.dirty = False
 
@@ -56,21 +58,25 @@ class SimpleRobot(object):
         if self.target[0] > self.x:
 
             print('Estado da percepcao: 0 Acao escolhida: Direita')
+            self.spriteState = 'right'
             self.x += 1
 
         elif self.target[0] < self.x:
 
             print('Estado da percepcao: 0 Acao escolhida: Esquerda')
+            self.spriteState = 'left'
             self.x -= 1
 
         elif self.target[1] > self.y:
 
             print('Estado da percepcao: 0 Acao escolhida: Abaixo')
+            self.spriteState = 'down'
             self.y += 1
 
         elif self.target[1] < self.y:
 
             print('Estado da percepcao: 0 Acao escolhida: Acima')
+            self.spriteState = 'up'
             self.y -= 1
 
         self.dirty = True if self.map[self.x][self.y] == 3 else False
