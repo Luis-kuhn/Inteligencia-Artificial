@@ -38,7 +38,7 @@ python -m pip install -U pygame
 ```python3 map.py``` na pasta do projeto.
 ---
 
-
+## Contribuidores<br>
   <table align="center">
   <tr>
     <td align="center">
