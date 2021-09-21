@@ -20,8 +20,6 @@ Escreva uma função de verificação (checkObj(sala)) fora do programa agente q
 Acrescente a ação de Não Operar "NoOp" na lista de ações do agente e ajuste a ação para "NoOp" uma vez que a sala estiver limpa.
 A função de agente deve ser chamada agenteObjetivo(percepcao, objObtido) e deve retornar uma das 6 ações possíveis (5 inicialmente definidas + "NoOp"). O parâmetro objObtido é a saída da função checkObj(sala).
 Utilize também uma variável de contador (chamada pontos) que contém o número de passos que o agente leva até atingir o objetivo (inclusive a Ação Aspirar conta 1 ponto).
-### Requisitos :heavy_check_mark:
-
   
 ### Tecnologias Utilizadas :computer:
 
@@ -32,15 +30,33 @@ Utilize também uma variável de contador (chamada pontos) que contém o número
 
 ### Utilização :mega:
 
-1. É necessário utilizar a biblioteca Pygame 
+1. É necessário utilizar a biblioteca Pygame: 
 ```
 python -m pip install -U pygame
 ```
 2. Após a finalização, execute o comando 
-```python3 map.py``` na pasta do projeto
+```python3 map.py``` na pasta do projeto.
 ---
 
-<p align="center">
-  <a href="https://github.com/thrnkk" ><img src="https://img.shields.io/badge/github-thrnkk-24292e"></a>
-  <a href="https://github.com/Luis-kuhn" ><img src="https://img.shields.io/badge/github-Luis--kuhn-24292e"></a>
-</p>
+
+  <table align="center">
+  <tr>
+    <td align="center">
+      <a href="#">
+        <img src="https://avatars.githubusercontent.com/u/62967324?v=4" width="100px;" alt="Foto do Iuri Silva no GitHub"/><br>
+        <sub>
+            <a href="https://github.com/Luis-kuhn" ><img src="https://img.shields.io/badge/github-Luis--kuhn-24292e"></a>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="#">
+        <img src="https://avatars.githubusercontent.com/u/60141339?v=4" width="100px;" alt="Foto do Marcelo Santos"/><br>
+        <sub>
+           <a href="https://github.com/thrnkk" ><img src="https://img.shields.io/badge/github-thrnkk-24292e"></a>
+        </sub>
+      </a>
+    </td>
+  </tr>
+</table>
+
