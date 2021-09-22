@@ -11,6 +11,10 @@ A função deve ser chamada agenteReativoSimples(percepcao) e deve retornar uma 
 Para movimentar o agente dentro do ambiente você pode considerar criar uma função de mapeamento (funcaoMapear) como um ponto de partida. Isto é, você pode fazer um caminho (ou mapa) onde o agente percorre todo o ambiente.
 Tenha em mente que as ações contra a parede (por exemplo, mover para a esquerda quando já está posicionado no ponto (1, 1)) não têm nenhum efeito (isto não significa que são proibidas).
 
+
+**Responda: A sua solução é extensível para um mundo 3 x 3? E para um mundo 6 x 6? Explique sua resposta.**
+> Sim é possível, ele apenas necessita se adaptar quando chegar no final do mundo e o valor de colunas percorridas for impar então ele deverá passar 2x pelo mesmo caminho.
+
 **CONSTRUÇÃO DO AGENTE  BASEADO EM OBJETIVO**
 
 A partir da estrutura do Agente Reativo Simples, aumente o código para transformá-lo em Agentes Baseados em Objetivos, na qual:
@@ -20,6 +24,11 @@ Escreva uma função de verificação (checkObj(sala)) fora do programa agente q
 Acrescente a ação de Não Operar "NoOp" na lista de ações do agente e ajuste a ação para "NoOp" uma vez que a sala estiver limpa.
 A função de agente deve ser chamada agenteObjetivo(percepcao, objObtido) e deve retornar uma das 6 ações possíveis (5 inicialmente definidas + "NoOp"). O parâmetro objObtido é a saída da função checkObj(sala).
 Utilize também uma variável de contador (chamada pontos) que contém o número de passos que o agente leva até atingir o objetivo (inclusive a Ação Aspirar conta 1 ponto).
+
+**Responda: É possível ter todo o espaço limpo efetivamente? Justifique sua resposta.**
+> Sim é possível, utilizando um ciclo hamiltoniano onde o robô percorre todo o mapa sem passar pelo mesmo caminho quando o mapa for de tamanho par, ou também por uma heurística como a busca A*
+
+
   
 ### Tecnologias Utilizadas :computer:
 
