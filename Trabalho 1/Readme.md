@@ -26,9 +26,7 @@ A função de agente deve ser chamada agenteObjetivo(percepcao, objObtido) e dev
 Utilize também uma variável de contador (chamada pontos) que contém o número de passos que o agente leva até atingir o objetivo (inclusive a Ação Aspirar conta 1 ponto).
 
 **Responda: É possível ter todo o espaço limpo efetivamente? Justifique sua resposta.**
-> Sim é possível, utilizando um ciclo hamiltoniano onde o robô percorre todo o mapa sem passar pelo mesmo caminho quando o mapa for de tamanho par, ou também por uma heurística como a busca A*
-
-
+> Sim é possível, utilizando a busca heurística A* ele percorre o menor caminho.
   
 ### Tecnologias Utilizadas :computer:
 
