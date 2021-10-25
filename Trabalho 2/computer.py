@@ -1,128 +1,144 @@
+import random
+
+# Authors: Christyelen Kramel, Luis Augusto Kühn, Thomas Ricardo Reinke e Yuri Matheus Hartmann
+
 class Computer(object):
 
     def __init__(self, mark):
 
         self.mark = mark
+        self.board = []
 
-    def is_end(self, board):
-        # Vertical win
-        for i in range(0, 3):
-            if (board[0][i] != '' and
-                board[0][i] == board[1][i] and
-                board[1][i] == board[2][i]):
-                return board[0][i]
+    def check_empty(self):
+        '''
+        Função responsável por verificar se o tabuleiro está vazio.
+        '''
 
-        # Horizontal win
-        for i in range(0, 3):
-            if (board[i] == ['X', 'X', 'X']):
-                return 'X'
-            elif (board[i] == ['O', 'O', 'O']):
-                return 'O'
+        remaining = 9
+        for row in self.board:
+            for space in row:
+                if space != '':
+                    remaining -= 1
 
-        # Main diagonal win
-        if (board[0][0] != '' and
-            board[0][0] == board[1][1] and
-            board[0][0] == board[2][2]):
-            return board[0][0]
+        if remaining == 9:
+            return True
 
-        # Second diagonal win
-        if (board[0][2] != '' and
-            board[0][2] == board[1][1] and
-            board[0][2] == board[2][0]):
-            return board[0][2]
+        return False
 
-        # Is whole board full?
-        for i in range(0, 3):
-            for j in range(0, 3):
-                # There's an empty field, we continue the game
-                if (board[i][j] == ''):
+    def check_win(self):
+        '''
+        Função responsável por verificar se há um vencedor e retorná-lo.
+        '''
+        
+        # columns
+        for row in range(3):
+            if len(set([self.board[i][row] for i in range(3)])) == 1:
+                if self.board[0][row] != '': return self.board[0][row]
+
+        # row
+        for row in self.board:
+            if len(set(row)) == 1:
+                if row[0] != '': return row[0]
+
+        # diagonal \
+        if len(set([self.board[i][i] for i in range(len(self.board))])) == 1:
+            if self.board[0][0] != '': return self.board[0][0]
+
+        # diagonal /
+        if len(set([self.board[i][len(self.board) - i - 1] for i in range(len(self.board))])) == 1:
+            if self.board[0][len(self.board) - 1] != '': return self.board[0][len(self.board) - 1]
+
+        # check not full
+        for row in self.board:
+            for space in row:
+                if space == '':
                     return None
-
-        # It's a tie!
+            
+        # tie
         return ''
 
-    def max(self, board):
+    def max(self):
+        '''
+        Função responsável pelo MAX.
+        '''
 
-        # Possible values for maxv are:
-        # -1 - loss
-        # 0  - a tie
-        # 1  - win
+        max_value = -2
+        coord_x = 0
+        coord_y = 0
 
-        # We're initially setting it to -2 as worse than the worst case:
-        maxv = -2
-
-        px = None
-        py = None
-
-        result = self.is_end(board)
-
-        # If the game came to an end, the function needs to return
-        # the evaluation function of the end. That can be:
-        # -1 - loss
-        # 0  - a tie
-        # 1  - win
-        if result == 'X':
-            return (-1, 0, 0) if self.mark == 'O' else (1, 0, 0)
-        elif result == 'O':
-            return (1, 0, 0) if self.mark == 'O' else (-1, 0, 0)
-        elif result == '':
-            return (0, 0, 0)
-
-        for i in range(0, 3):
-            for j in range(0, 3):
-                if board[i][j] == '':
-
-                    board[i][j] = 'O' if self.mark == 'O' else 'X'
-                    (m, min_i, min_j) = self.min(board)
-
-                    if m > maxv:
-                        maxv = m
-                        px = i
-                        py = j
-
-                    board[i][j] = ''
-
-        return (maxv, px, py)
-
-    def min(self, board):
-
-        # Possible values for minv are:
-        # -1 - win
-        # 0  - a tie
-        # 1  - loss
-
-        # We're initially setting it to 2 as worse than the worst case:
-        minv = 2
-
-        qx = None
-        qy = None
-
-        result = self.is_end(board)
+        result = self.check_win()
 
         if result == 'X':
             return (-1, 0, 0) if self.mark == 'O' else (1, 0, 0)
+
         elif result == 'O':
             return (1, 0, 0) if self.mark == 'O' else (-1, 0, 0)
+
         elif result == '':
             return (0, 0, 0)
 
-        for i in range(0, 3):
-            for j in range(0, 3):
-                if board[i][j] == '':
-                    board[i][j] = 'X' if self.mark == 'O' else 'O'
-                    (m, max_i, max_j) = self.max(board)
-                    if m < minv:
-                        minv = m
-                        qx = i
-                        qy = j
-                    board[i][j] = ''
+        for x in range(3):
+            for y in range(3):
+                if self.board[y][x] == '':
 
-        return (minv, qx, qy)
+                    self.board[y][x] = 'O' if self.mark == 'O' else 'X'
+                    (min_value, _, _) = self.min()
+
+                    if min_value > max_value:
+                        max_value = min_value
+                        coord_x = x
+                        coord_y = y
+
+                    self.board[y][x] = ''
+
+        return (max_value, coord_x, coord_y)
+
+    def min(self):
+        '''
+        Função responsável pelo MIN.
+        '''
+
+        min_value = 2
+        coord_x = 0
+        coord_y = 0
+
+        result = self.check_win()
+
+        if result == 'X':
+            return (-1, 0, 0) if self.mark == 'O' else (1, 0, 0)
+
+        elif result == 'O':
+            return (1, 0, 0) if self.mark == 'O' else (-1, 0, 0)
+
+        elif result == '':
+            return (0, 0, 0)
+
+        for x in range(3):
+            for y in range(3):
+
+                if self.board[y][x] == '':
+                    self.board[y][x] = 'X' if self.mark == 'O' else 'O'
+                    (max_value, _, _) = self.max()
+
+                    if max_value < min_value:
+                        min_value = max_value
+                        coord_x = x
+                        coord_y = y
+
+                    self.board[y][x] = ''
+
+        return (min_value, coord_x, coord_y)
 
     def move(self, board):
+        '''
+        Função responsável por retornar uma jogada.
+        '''
 
-        (m, px, py) = self.max(board)
+        self.board = board
 
-        print(self.mark)
-        print(board)
-        return (px, py)
+        if self.check_empty():
+            return (random.randint(0, 2), random.randint(0, 2))
+
+        else:
+            (m, coord_x, coord_y) = self.max()
+            return (coord_x, coord_y)
