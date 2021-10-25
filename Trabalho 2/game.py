@@ -2,6 +2,8 @@ import pygame
 import time
 from computer import Computer
 
+# Authors: Christyelen Kramel, Luis Augusto Kühn, Thomas Ricardo Reinke e Yuri Matheus Hartmann
+
 class Screen(object):
 
     def __init__(self, height, width):
@@ -35,6 +37,9 @@ class Screen(object):
         self.computerX = Computer('X')
 
     def draw_button(self, message, x, y, w, h, inactive, active, font_color, border, action = None, parameters = None):
+        '''
+        Função responsável por desenhar um botão na tela.
+        '''
 
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
@@ -65,52 +70,47 @@ class Screen(object):
         self.screen.blit(textBlock, ((x + (w / 2)) - text_width / 2, (y + (h / 2) - text_height / 2)))
 
     def start_game(self, mode):
+        '''
+        Função responsável por iniciar o jogo de acordo com o modo escolhido.
+        '''
 
         self.game_running = True
         self.game_mode = mode
         time.sleep(1)
 
     def run(self):
-
-        # player x player
-        if (self.game_mode == 1):
-            self.screen.fill(self.WHITE)
-            self.draw_game()
+        '''
+        Função responsável pelo loop principal.
+        '''
 
         # player x ai
         if self.game_mode == 2:
 
             if self.turn == 'O':
 
-                time.sleep(0.5)
-                print(self.board.copy())
                 move = self.computerO.move(self.board.copy())
                 self.add_mark(move[0], move[1])
-
-            self.screen.fill(self.WHITE)
-            self.draw_game()
 
         # ai x ai
         if self.game_mode == 3:
             
             if self.turn == 'O':
 
-                time.sleep(0.5)
-                print(self.board.copy())
                 move = self.computerO.move(self.board.copy())
                 self.add_mark(move[0], move[1])
 
             elif self.turn == 'X':
 
-                time.sleep(0.5)
-                print(self.board.copy())
                 move = self.computerX.move(self.board.copy())
                 self.add_mark(move[0], move[1])
 
-            self.screen.fill(self.WHITE)
-            self.draw_game()
+        self.screen.fill(self.WHITE)
+        self.draw_game()
 
     def check_win(self):
+        '''
+        Função responsável por verificar se o jogo acabou.
+        '''
 
         # columns
         for row in range(3):
@@ -130,6 +130,7 @@ class Screen(object):
         if len(set([self.board[i][len(self.board)-i-1] for i in range(len(self.board))])) == 1:
             if self.board[0][len(self.board)-1] != '': return True
 
+        # check empty
         remaining = 9
         for row in self.board:
             for space in row:
@@ -143,6 +144,9 @@ class Screen(object):
 
 
     def restart(self):
+        '''
+        Função responsável por reiniciar o tabuleiro.
+        '''
 
         self.draw_game()
         pygame.display.flip()
@@ -151,16 +155,19 @@ class Screen(object):
         self.board = [['', '', ''], ['', '', ''], ['', '', '']]
 
     def add_mark(self, x, y):
+        '''
+        Função responsável por adicionar um X ou O no tabuleiro.
+        '''
 
         self.board[y][x] = self.turn
         result = self.check_win()
 
-        # Empate
+        # tie
         if result is None:
             self.ties += 1
             self.restart()
 
-        # Vitória
+        # win
         elif result:
             if self.turn == 'X':
                 self.wins_x += 1
@@ -172,6 +179,9 @@ class Screen(object):
         self.turn = 'X' if self.turn == 'O' else 'O'
 
     def draw_mark(self, x, y, block):
+        '''
+        Função responsável por desenhar X ou O no tabuleiro.
+        '''
 
         if self.board[y][x]:
 
@@ -184,6 +194,9 @@ class Screen(object):
             self.screen.blit(sprite, (sprite_x, sprite_y))
 
     def draw_board(self):
+        '''
+        Função responsável por desenhar o tabuleiro.
+        '''
 
         board = pygame.draw.rect(self.screen, self.GRAY, (20, 150, 360, 360))
 
@@ -220,53 +233,42 @@ class Screen(object):
 
                 self.draw_mark(x, y, block)
 
-    def draw_scores(self):
+    def draw_score(self, x, y, asset, data):
+        '''
+        Função responsável por desenhar os placares na tela.
+        '''
 
         font = pygame.font.Font("freesansbold.ttf", 20)
 
         # X score
-        block = pygame.draw.rect(self.screen, self.WHITE, (20, 20, 100, 100))
-        sprite_x = pygame.image.load('assets/x.png')
+        block = pygame.draw.rect(self.screen, self.WHITE, (x, y, 100, 100))
+        sprite_x = pygame.image.load(asset)
         sprite_x = pygame.transform.scale(sprite_x, (50, 50))
 
-        textBlock = font.render(str(self.wins_x), 1, self.BLACK)
+        textBlock = font.render(data, 1, self.BLACK)
         text_height = float(textBlock.get_height())
         text_width = float(textBlock.get_width())
 
         self.screen.blit(sprite_x, (block.x + 25, 20))
         self.screen.blit(textBlock, (block.x + 50 - text_width / 2, 100 - text_height / 2))
 
-        # O score
-        block = pygame.draw.rect(self.screen, self.WHITE, (150, 20, 100, 100))
-        sprite_o = pygame.image.load('assets/o.png')
-        sprite_o = pygame.transform.scale(sprite_o, (50, 50))
-
-        textBlock = font.render(str(self.wins_o), 1, self.BLACK)
-        text_height = float(textBlock.get_height())
-        text_width = float(textBlock.get_width())
-
-        self.screen.blit(sprite_o, (block.x + 25, 20))
-        self.screen.blit(textBlock, (block.x + 50 - text_width / 2, 100 - text_height / 2))
-
-        # draw score
-        block = pygame.draw.rect(self.screen, self.WHITE, (280, 20, 100, 100))
-        sprite_scale = pygame.image.load('assets/scale.png')
-        sprite_scale = pygame.transform.scale(sprite_scale, (50, 50))
-
-        textBlock = font.render(str(self.ties), 1, self.BLACK)
-        text_height = float(textBlock.get_height())
-        text_width = float(textBlock.get_width())
-
-        self.screen.blit(sprite_scale, (block.x + 25, 20))
-        self.screen.blit(textBlock, (block.x + 50 - text_width / 2, 100 - text_height / 2))
-
-
     def draw_game(self):
+        '''
+        Função responsável por atualizar a tela.
+        '''
 
-        self.draw_scores()
+        self.draw_score(20, 20, 'assets/x.png', f'{self.wins_x} vitórias')
+        self.draw_score(150, 20, 'assets/o.png', f'{self.wins_o} vitórias')
+        self.draw_score(280, 20, 'assets/scale.png', f'{self.ties} empates')
+
         self.draw_board()
 
+        pygame.display.flip()
+
     def main_menu(self):
+        '''
+        Função responsável por desenhar o menu principal.
+        '''
 
         # background
         background_rectangle = pygame.Surface((2, 2))
