@@ -3,8 +3,12 @@
 </p>
 
 ## Descrição do Trabalho
+<p align="center">
+  <img src="./assets/robot/finished.png">
+</p>
 
 **CONSTRUÇÃO DO AGENTE REATIVO SIMPLES**
+
 
 Escreva uma função de Agente Reativo Simples para o mundo 4 x 4 do aspirador de pó automático que garante limpar toda a sala, independentemente da posição inicial. 
 A função deve ser chamada agenteReativoSimples(percepcao) e deve retornar uma das 5 possíveis ações ('acima', 'abaixo', 'esquerda', 'direita', 'aspirar'). A variável "percepcao" dentro dos parênteses é a entrada da função, isto é a posição em que o agente se encontra e o status da percepção (limpo ou sujo).
@@ -27,7 +31,11 @@ Utilize também uma variável de contador (chamada pontos) que contém o número
 
 **Responda: É possível ter todo o espaço limpo efetivamente? Justifique sua resposta.**
 > Sim é possível, utilizando a busca heurística A* ele percorre o menor caminho.
-  
+
+<p align="center">
+  <img src="./assets/grid.png">
+</p>
+
 ### Tecnologias Utilizadas :computer:
 
 <p align="center">
