@@ -43,7 +43,7 @@ This is a simple implementation of the classic Tic-Tac-Toe game with an artifici
    ```
 2. Execute the script:
    ```bash
-    python <script_name>.py
+    python game.py
    ```
 Feel free to explore and modify the code to enhance or customize the game according to your preferences. Happy gaming!
 
